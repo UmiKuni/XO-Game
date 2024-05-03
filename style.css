@@ -19,6 +19,7 @@
   align-items: center;
   font-size: 48px;
   cursor: pointer;
+  margin: 2px;
 }
 
 #resest-button {
