@@ -8,8 +8,8 @@
      }
   //Hàm event Restart game
         let Restart = () =>{
-            for (int i= 0; i< 3; i++){
-                for (int j = 0; j < 3; j++)
+            for (let i= 0; i< 3; i++){
+                for (let j = 0; j < 3; j++)
                 {
                     block[i][j] = ' '
                 }
@@ -17,7 +17,7 @@
         }
   //Hàm kiểm tra điều kiện kết thúc game: return || 0: Chưa có ai thắng || 1: Người chơi thắng || -1: Máy thắng
       let Check = () => {
-            for (int i = 0; i < 3; i++){
+            for (let i = 0; i < 3; i++){
                 if (block[i][0] == block[i][1] == block[i][2] == 'O' || block[0][i] == block[1][i] == block[2][i] == 'O')
                     return 1
                 else if (block[i][0] == block[i][1] == block[i][2] == 'X' || block[0][i] == block[1][i] == block[2][i] == 'X')
@@ -39,10 +39,18 @@
         }
   //Hàm event Player chọn ô
         let Tick = (let row, let column) =>{
-            block[row][column] = 'O'
+            block[row][column] = 'O';
+            Print();
         }
   // Hàm để hiển thị giá trị trên màn hình
-
+let Print = () => {
+  for (let i = 0; i < 2; i++)
+    {
+        document.getElementById(i).innerHTML = block[0][i];
+        document.getElementById(i+3).innerHTML = block[1][i];
+        document.getElementById(i+6).innerHTML = block[2][i];
+    }
+}
 
     //Khởi tạo mảng 2 chiều gồm 3 hàng và 3 cột chứa giá trị X, O;
     Setup()
