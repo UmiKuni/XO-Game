@@ -1,5 +1,4 @@
-<head></head>
-<script>
+
   //Hàm Setup Game
       let Setup = () =>{
           let block = new Array(3)
@@ -48,6 +47,4 @@
     //Khởi tạo mảng 2 chiều gồm 3 hàng và 3 cột chứa giá trị X, O;
     Setup()
 </script>
-<body>
-  <div></div>
-</body>
+
