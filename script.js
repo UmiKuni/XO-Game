@@ -1,9 +1,15 @@
-//Hàm Setup Game
+//Setup Game
 let arr = new Array(3);
 for (let i = 0; i < 3; i++) {
   arr[i] = new Array(3);
 }
-
+//Hàm thêm các lệnh Click vào mỗi ô
+let addClickEvents = () => {
+  let cells = document.getElementsByClassName("cell");
+  for (let cell of cells) {
+    cell.setAttribute("onclick", "Tick(parseInt(this.id), arr)");
+  }
+};
 //Hàm event Restart game
 let Restart = (block = arr) => {
   for (let i = 0; i < 3; i++) {
@@ -12,6 +18,8 @@ let Restart = (block = arr) => {
     }
   }
   Print(block);
+  addClickEvents();
+  document.getElementById("Output").innerHTML = "";
 };
 //Hàm kiểm tra điều kiện kết thúc game: return || 0: Chưa có ai thắng || 1: Người chơi thắng || -1: Máy thắng
 let Check = (block) => {
@@ -39,15 +47,39 @@ let Check = (block) => {
     return -1;
   return 0;
 };
-//
+//Hàm dừng các lệnh Click khi kết thúc trò chơi
+let removeClickEvents = () => {
+  let cells = document.getElementsByClassName("cell");
+  for (let cell of cells) {
+    cell.removeAttribute("onclick");
+  }
+};
+// Hàm kiểm tra xem bảng có đầy hay không
+let isBoardFull = (block) => {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (block[i][j] === " ") {
+        return false; // Nếu có ô trống, trả về false
+      }
+    }
+  }
+  return true; // Nếu không còn ô trống, trả về true
+};
+//Hàm hiển thị kết quá
 let Result = (block) => {
-  if (Check(block) == 1)
+  if (Check(block) == 1) {
     document.getElementById("Output").innerHTML =
       "Congratulation! You're win the game!";
-  else if (Check(block) == -1)
+    removeClickEvents();
+  } else if (Check(block) == -1) {
     document.getElementById("Output").innerHTML = "You lose!";
-  else if (Check(block) == 0)
+    removeClickEvents();
+  } else if (Check(block) == 0 && isBoardFull(block)) {
+    document.getElementById("Output").innerHTML = "Draw!";
+    removeClickEvents();
+  } else {
     document.getElementById("Output").innerHTML = "Nothing";
+  }
 };
 //Hàm để N-Player chọn ô
 let NTick = (block) => {
@@ -57,16 +89,29 @@ let NTick = (block) => {
     NTick(block);
   else block[RdRow][RdColumn] = "X";
 };
+//Hàm check ID của từng ô
+let checkID = (ID) => {
+  let temp = 0;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (ID == temp) {
+        return [i, j];
+      } else temp++;
+    }
+  }
+};
 //Hàm event Player chọn ô
-let Tick = (row, column, block = arr) => {
+let Tick = (ID, block = arr) => {
+  let [row, column] = checkID(ID);
+  checkID(ID, row, column);
   block[row][column] = "O";
   Print(block);
   Result(block);
   if (Check(block) == 1) return;
   //
   NTick(block);
-  Result(block);
   Print(block);
+  Result(block);
   if (Check(block) == -1) return;
 };
 // Hàm để hiển thị giá trị trên màn hình
