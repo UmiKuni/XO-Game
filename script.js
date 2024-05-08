@@ -134,6 +134,7 @@ let checkID = (ID) => {
 //Hàm event Player chọn ô
 let Tick = (ID, block = arr) => {
   let [row, column] = checkID(ID);
+  if (block[row][column] == "O" || block[row][column] == "X") return;
   block[row][column] = "O";
   Print(block);
   Result(block);
