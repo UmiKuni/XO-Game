@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+
 }
 
 .row {
@@ -22,7 +22,12 @@
   margin: 2px;
   
 }
-
+#Output {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
 #resest-button {
   font-size: 20px;
 }
