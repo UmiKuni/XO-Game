@@ -109,7 +109,7 @@ let blocked = (block = arr) => {
       if (block[2][i] == "O") return [0, i];
       else if (block[0][i] == "O") return [2, i];
   }
-  return null;
+  return [null, null];
 };
 ////Level 1
 let Level1 = (block) => {
