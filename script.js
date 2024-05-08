@@ -67,28 +67,59 @@ let isBoardFull = (block) => {
 };
 //Hàm hiển thị kết quá
 let Result = (block) => {
+  let outputElement = document.getElementById("Output");
+  let imgElement = document.createElement("img");
   if (Check(block) == 1) {
-    document.getElementById("Output").innerHTML =
-      "Congratulation! You're win the game!";
+    outputElement.innerHTML = "Congratulation! You're win the game!";
+    imgElement.src = "cat.jpg";
     removeClickEvents();
   } else if (Check(block) == -1) {
-    document.getElementById("Output").innerHTML = "You lose!";
+    outputElement.innerHTML = "You lose!";
+    imgElement.src = "cat2.jpg";
     removeClickEvents();
   } else if (Check(block) == 0 && isBoardFull(block)) {
-    document.getElementById("Output").innerHTML = "Draw!";
+    outputElement.innerHTML = "Draw!";
+    imgElement.src = "cat3.jpg";
     removeClickEvents();
   } else {
-    document.getElementById("Output").innerHTML = "Nothing";
+    outputElement.innerHTML = "Nothing";
+    return;
   }
+  //Thêm ảnh sau khi kết thúc
+  imgElement.style.width = "150px"; // Đặt chiều rộng của hình ảnh
+  imgElement.style.height = "150px"; // Đặt chiều cao của hình ảnh
+  outputElement.appendChild(imgElement);
 };
-//Hàm để N-Player chọn ô
-let NTick = (block) => {
+//Hàm máy Level 0, 1
+////Level 0
+let Level0 = (block) => {
   let RdRow = Math.floor(Math.random() * 3);
   let RdColumn = Math.floor(Math.random() * 3);
   if (block[RdRow][RdColumn] == "O" || block[RdRow][RdColumn] == "X")
-    NTick(block);
+    Level0(block);
   else block[RdRow][RdColumn] = "X";
 };
+/* Tìm đường chặn */
+let blocked = (block = arr) => {
+  for (let i = 0; i < 3; i++) {
+    if (block[i][1] == "O")
+      if (block[i][2] == "O") return [i, 0];
+      else if (block[i][0] == "O") return [i, 2];
+    if (block[1][i] == "O")
+      if (block[2][i] == "O") return [0, i];
+      else if (block[0][i] == "O") return [2, i];
+  }
+  return null;
+};
+////Level 1
+let Level1 = (block) => {
+  let [pRow, pColumn] = blocked();
+  if (pRow == null || block[pRow][pColumn] == "X") Level0(block);
+  else {
+    block[pRow][pColumn] = "X";
+  }
+};
+
 //Hàm check ID của từng ô
 let checkID = (ID) => {
   let temp = 0;
@@ -103,13 +134,13 @@ let checkID = (ID) => {
 //Hàm event Player chọn ô
 let Tick = (ID, block = arr) => {
   let [row, column] = checkID(ID);
-  checkID(ID, row, column);
   block[row][column] = "O";
   Print(block);
   Result(block);
   if (Check(block) == 1) return;
   //
-  NTick(block);
+  Level1(block);
+
   Print(block);
   Result(block);
   if (Check(block) == -1) return;
