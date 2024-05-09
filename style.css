@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .row {
@@ -20,7 +19,6 @@
   font-size: 48px;
   cursor: pointer;
   margin: 2px;
-  
 }
 #Output {
   display: flex;
@@ -30,4 +28,24 @@
 }
 #resest-button {
   font-size: 20px;
+}
+
+body {
+  background-color: ;
+}
+
+.level {
+  background-color: #50fa7b;
+  border: 10px;
+  color: black;
+  font-size: 20px;
+  text-align: justify;
+  opacity: 0.6;
+  transition: 0.3s;
+  padding: 8px 16px;
+  margin: 2px;
+}
+
+.level:hover {
+  opacity: 1s;
 }
