@@ -8,7 +8,20 @@
 .row {
   display: flex;
 }
-
+.custom-text-header {
+  font-family: "Arial", sans-serif; /* Kiểu chữ */
+  color: #e6e6e6;
+  font-size: 60px; /* Kích thước chữ */
+  font-weight: bold; /* Độ đậm của chữ */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.custom-text-normal {
+  font-family: "Georgia", serif; /* Kiểu chữ */
+  color: #e6e6e6;
+  font-size: 30px; /* Kích thước chữ */
+  font-weight: 5px; /* Độ đậm của chữ */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
 .cell {
   width: 100px;
   height: 100px;
@@ -17,8 +30,18 @@
   justify-content: center;
   align-items: center;
   font-size: 48px;
+  color: #e6e6e6;
   cursor: pointer;
+  background-color: #4a4a4a;
   margin: 2px;
+}
+.cell:hover {
+  position: relative;
+  width: 94px;
+  height: 94px;
+  margin: 5px;
+  background-color: #4a4a4a;
+  animation: blinkblink 1s linear infinite;
 }
 #Output {
   display: flex;
@@ -27,25 +50,46 @@
   height: 200px;
 }
 #resest-button {
-  font-size: 20px;
+  background-color: #4a4a4a;
+  border: 1px solid black;
+  font-size: 30px;
+  font-weight: 20px;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 5px;
+  width: 230px;
+  height: 60px;
+  cursor: pointer;
 }
-
-body {
-  background-color: ;
+#resest-button:hover {
+  position: relative;
+  background-color: #353535;
+  text-align: center;
+  font-size: 28px;
 }
 
 .level {
-  background-color: #50fa7b;
-  border: 10px;
-  color: black;
+  background-color: #4a4a4a;
+  border: 1px solid black;
+  color: #e6e6e6;
   font-size: 20px;
   text-align: justify;
   opacity: 0.6;
   transition: 0.3s;
   padding: 8px 16px;
   margin: 2px;
+  border-radius: 5px;
 }
 
 .level:hover {
   opacity: 1s;
+}
+
+body {
+  background-color: #1c1c1c;
+}
+@keyframes blinkblink {
+  50% {
+    background-color: #6d6d6d;
+  }
 }
