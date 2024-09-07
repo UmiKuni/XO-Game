@@ -8,11 +8,18 @@
   <body>
     <!-- Flex-Box -->
     <h1><span class="custom-text-header">XO GAME</span></h1>
-    <h2><span class="custom-text-normal">Độ khó trò chơi:</span></h2>
+    <h2>
+      <div class="custom-text-normal">
+        Level-Game :
+        <div id="Mode" class="custom-text-normal"></div>
+      </span>
+    </h2>
     <!-- Cai nao tai su dung nhieu lan thi dat vao class, con lai thi dat vao id -->
-    <button class="level" id="l0">Easy Cat</button>
-    <button class="level" id="l1">Normal Cat</button>
-    <button class="level" id="l2">Black Cat</button>
+    <button class="level" id="l0" onclick="SetGameMode(0)">Easy Cat</button>
+    <button class="level" id="l1" onclick="SetGameMode(1)">Normal Cat</button>
+    <button class="level" id="l2" onclick="SetGameMode(2)">Black Cat</button>
+    <button class="level" id="l2" onclick="SetGameMode(3)">Sigma Cat</button>
+    <span class = "custom-text-normal" id="Notice">: {Notice}</span>
 
     <div class="container">
       <div class="row">
