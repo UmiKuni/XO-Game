@@ -3,6 +3,7 @@ let arr = new Array(3);
 for (let i = 0; i < 3; i++) {
   arr[i] = new Array(3);
 }
+let GameMode = 0;
 //Hàm loại bỏ và thêm animation khỏi các ô
 let removeAnimation = (pID) => {
   let styleSheet = document.styleSheets[0];
@@ -13,7 +14,6 @@ let removeAnimation = (pID) => {
       break;
     }
   }
-  //document.getElementById(pID).style.animation = "none";
 };
 let addAnimationEvents = () => {
   let styleSheet = document.styleSheets[0];
@@ -43,6 +43,7 @@ let Restart = (block = arr) => {
   addClickEvents();
   addAnimationEvents();
   document.getElementById("Output").innerHTML = "";
+  SetGameMode(GameMode);
 };
 //Hàm kiểm tra điều kiện kết thúc game: return || 0: Chưa có ai thắng || 1: Người chơi thắng || -1: Máy thắng
 let Check = (block) => {
@@ -87,6 +88,31 @@ let isBoardFull = (block) => {
     }
   }
   return true; // Nếu không còn ô trống, trả về true
+};
+//HTML: Hàm event reset độ khó trò chơi
+let SetGameMode = (mode) => {
+  GameMode = mode;
+  let ModeElement = document.getElementById("Mode");
+  let img = document.createElement("img");
+  ModeElement.innerHTML = mode;
+  switch (mode) {
+    case 0:
+      img.src = "catlv1.jpg";
+      break;
+    case 1:
+      img.src = "catlv2.jpg";
+      break;
+    case 2:
+      img.src = "catlv1.jpg";
+      break;
+    case 3:
+      img.src = "catlv2.jpg";
+      break;
+  }
+  img.style.width = "30px"; // Đặt chiều rộng của hình ảnh
+  img.style.height = "30px"; // Đặt chiều cao của hình ảnh
+  ModeElement.appendChild(img);
+  Restart();
 };
 //Hàm hiển thị kết quá
 let Result = (block) => {
@@ -141,19 +167,12 @@ let blocked = (block = arr, Type) => {
   }
   return [null, null];
 };
-let cross_blocked = (block) => {
-  if (block[1][1] == "O") {
-    //cross blocks
-    if (block[0][0] == "O" && block[2][2] == " ") return [2, 2];
-    if (block[0][2] == "O" && block[2][0] == " ") return [2, 0];
-    if (block[2][0] == "O" && block[0][2] == " ") return [0, 2];
-    if (block[2][2] == "O" && block[0][0] == " ") return [0, 0];
-  } else if (block[1][1] == "X") {
-    //cross attack
-    if (block[0][0] == "X" && block[2][2] == " ") return [2, 2];
-    if (block[0][2] == "X" && block[2][0] == " ") return [2, 0];
-    if (block[2][0] == "X" && block[0][2] == " ") return [0, 2];
-    if (block[2][2] == "X" && block[0][0] == " ") return [0, 0];
+let cross_blocked = (block, Type) => {
+  if (block[1][1] == Type) {
+    if (block[0][0] == Type && block[2][2] == " ") return [2, 2];
+    if (block[0][2] == Type && block[2][0] == " ") return [2, 0];
+    if (block[2][0] == Type && block[0][2] == " ") return [0, 2];
+    if (block[2][2] == Type && block[0][0] == " ") return [0, 0];
   }
   return [null, null];
 };
@@ -196,8 +215,36 @@ let Level2 = (block) => {
         return [getRandomFrom([0, 2]), getRandomFrom([0, 2])];
       break;
   }
-  [pRow, pColumn] = cross_blocked(block);
+  [pRow, pColumn] = cross_blocked(block, "O");
   if (pRow != null && isEmpty(block, [pRow, pColumn])) return [pRow, pColumn];
+  return Level1(block);
+};
+////Level 3
+let Level3 = (block) => {
+  let [pRow, pColumn] = blocked(block, "X");
+  //Can bot-win or not
+  if (pRow != null) return [pRow, pColumn];
+  else {
+    [pRow, pColumn] = cross_blocked(block, "X");
+    if (pRow != null) return [pRow, pColumn];
+  }
+  [pRow, pColumn] = cross_blocked(block, "O");
+  if (pRow != null && isEmpty(block, [pRow, pColumn])) return [pRow, pColumn];
+  switch (CountEmpty(block)) {
+    case 8:
+      if (block[1][1] == " ") return [1, 1];
+      if (block[1][1] == "O")
+        return [getRandomFrom([0, 2]), getRandomFrom([0, 2])];
+      break;
+    case 6:
+      if (block[1][1] == "O") {
+        if (block[0][0] == "O" && block[2][2] == "X") return [0, 2];
+        if (block[0][2] == "O" && block[2][0] == "X") return [0, 0];
+        if (block[2][0] == "O" && block[0][2] == "X") return [2, 2];
+        if (block[2][2] == "O" && block[0][0] == "X") return [2, 0];
+      }
+      break;
+  }
   return Level1(block);
 };
 //Hàm check ID của từng ô
@@ -211,7 +258,7 @@ let checkID = (ID) => {
     }
   }
 };
-//Hàm event Player chọn ô
+//HTML: Hàm event khi Player chọn ô
 let Tick = (ID, block = arr) => {
   //
   removeAnimation(ID);
@@ -222,14 +269,31 @@ let Tick = (ID, block = arr) => {
   Result(block);
   if (Check(block) == 1) return;
   //
-  let [prow, pcolumn] = Level2(block);
+  let prow, pcolumn;
+  switch (GameMode) {
+    case 0:
+      [prow, pcolumn] = Level0(block);
+      break;
+    case 1:
+      [prow, pcolumn] = Level1(block);
+      break;
+    case 2:
+      [prow, pcolumn] = Level2(block);
+      break;
+    case 3:
+      [prow, pcolumn] = Level3(block);
+      break;
+    default:
+      [prow, pcolumn] = Level0(block);
+      break;
+  }
   block[prow][pcolumn] = "X";
   Print(block);
   removeAnimation(pcolumn + 3 * prow);
   Result(block);
   if (Check(block) == -1) return;
 };
-// Hàm để hiển thị giá trị trên màn hình
+//HTML: Hàm để hiển thị giá trị trên màn hình
 let Print = (block) => {
   for (let i = 0; i < 3; i++) {
     document.getElementById(i).innerHTML = block[0][i];
